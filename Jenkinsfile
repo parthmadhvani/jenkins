@@ -42,7 +42,7 @@
 //             deleteDir()
 //         }
 //     }
-// }
+// } ..
 
 pipeline {
     agent any
