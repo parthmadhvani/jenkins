@@ -19,8 +19,14 @@ pipeline {
                 script {
                     // Run SonarQube analysis
                     withSonarQubeEnv(SONARQUBE_SERVER) {
-                        // Use 'sonar-scanner' to analyze your project
-                        sonar-scanner.bat -D"sonar.projectKey=sonar" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.token=sqp_a76ce9780f487c48f3fcfda1b50ede165c11d64f"
+                        // Use 'sonar-scanner.bat' for Windows and properly format the command
+                        bat '''
+                            sonar-scanner.bat \
+                            -Dsonar.projectKey=sonar \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.token=sqp_a76ce9780f487c48f3fcfda1b50ede165c11d64f
+                        '''
                     }
                 }
             }
