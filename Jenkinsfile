@@ -1,58 +1,38 @@
-// pipeline {
-//     agent any
-    
-//     environment {
-//         GIT_URL = 'https://github.com/parthmadhvani/jenkins.git'
-//         GIT_BRANCH = 'main'
-//     }
-    
-//     stages {
-//         stage('Checkout') {
-//             steps {
-//                 // No credentials needed for a public repository
-//                 git branch: "${env.GIT_BRANCH}", url: "${env.GIT_URL}"
-//             }
-//         }
-        
-//         stage('Build') {
-//             steps {
-//                 echo 'Building the application...'
-//                 // Add build commands here
-//             }
-//         }
-        
-//         stage('Test') {
-//             steps {
-//                 echo 'Running tests...'
-//                 // Add test commands here
-//             }
-//         }
-        
-//         stage('Deploy') {
-//             steps {
-//                 echo 'Deploying the application...'
-//                 // Add deploy commands here
-//             }
-//         }
-//     }
-    
-//     post {
-//         always {
-//             echo 'Cleaning up workspace...'
-//             deleteDir()
-//         }
-//     }
-// } ....
-
 pipeline {
     agent any
-    
+
+    environment {
+        // Define SonarQube server name configured in Jenkins (go to Manage Jenkins -> Configure System -> SonarQube Servers)
+        SONARQUBE_SERVER = 'sonar'
+    }
+
     stages {
-        stage('Hello World') {
+        stage('Checkout Code') {
             steps {
-                echo 'Hello, World!'
+                // Checkout the code from your source control (e.g., Git)
+                git url: 'https://github.com/your-repo-url.git', branch: 'main'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Run SonarQube analysis
+                    withSonarQubeEnv(SONARQUBE_SERVER) {
+                        // Use 'sonar-scanner' to analyze your project
+                        sonar-scanner.bat -D"sonar.projectKey=sonar" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.token=sqp_a76ce9780f487c48f3fcfda1b50ede165c11d64f"
+                    }
+                }
             }
         }
     }
-}
 
+    post {
+        success {
+            echo 'Build succeeded! SonarQube analysis completed successfully.'
+        }
+        failure {
+            echo 'Build failed! Please check the logs and the SonarQube analysis results for more details.'
+        }
+    }
+}
