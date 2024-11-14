@@ -25,8 +25,8 @@ pipeline {
                                 sonar-scanner \
                                 -Dsonar.projectKey=sonar \
                                 -Dsonar.sources=. \
-                                -Dsonar.host.url=http://localhost:9000 \
-                                -Dsonar.token=sqp_a76ce9780f487c48f3fcfda1b50ede165c11d64f
+                                -Dsonar.host.url=http://192.168.4.30:9000 \
+                                -Dsonar.token=squ_da16511a0007e20ed0aa5904449f810d6d9560af
                             '''
                         } else {
                             // Use 'sonar-scanner.bat' for Windows
